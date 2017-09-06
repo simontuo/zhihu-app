@@ -10,7 +10,7 @@
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
+//test git zhihu/1.0
 Route::middleware('api')->get('/topics', 'TopicsController@topics');
 Route::middleware('auth:api')->post('/question/follower', 'QuestionFollowController@follower');
 Route::middleware('auth:api')->post('/question/follow', 'QuestionFollowController@followThisQuestion');
