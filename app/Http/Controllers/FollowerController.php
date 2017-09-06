@@ -21,7 +21,7 @@ class FollowerController extends Controller
         // 关注作者的人当中是否存在当前用户
         $user = $this->user->byId($id);
         $followers = $user->followersUser()->pluck('follower_id')->toArray();
-        if (in_array(Auth::guard('api')->user()->id, $followers)) {
+        if (in_array(user('api')->id, $followers)) {
             return response()->json(['followed' => true]);
         }
         // 当前用户关注的人之中是否存在作者
@@ -37,7 +37,7 @@ class FollowerController extends Controller
     {
         $userToFollow = $this->user->byId(request('user'));
 
-        $followed = Auth::guard('api')->user()->followThisUser($userToFollow->id);
+        $followed = user('api')->followThisUser($userToFollow->id);
 
         if (count($followed['attached']) > 0) {
 
