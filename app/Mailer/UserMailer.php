@@ -2,6 +2,8 @@
 namespace App\Mailer;
 
 use Auth;
+use App\Mailer\Mailer;
+use App\User;
 
 class UserMailer extends Mailer
 {

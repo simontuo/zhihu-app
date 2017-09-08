@@ -18,9 +18,10 @@ class MessageController extends Controller
     public function store()
     {
         $message = $this->message->create([
-            'to_user_id' => request('user'),
+            'to_user_id'   => request('user'),
             'from_user_id' => user('api')->id,
-            'body' => request('body'),
+            'body'         => request('body'),
+            'dialog_id'    => time().Auth::id(),
         ]);
 
         if ($message) {
