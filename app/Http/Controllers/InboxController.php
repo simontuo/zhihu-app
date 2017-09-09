@@ -3,30 +3,28 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Message;
+use App\Repositories\MessageRepository;
 
 class InboxController extends Controller
 {
+    protected $message;
 
-    public function __construct()
+    public function __construct(MessageRepository $message)
     {
         $this->middleware('auth');
+        $this->message = $message;
     }
 
     public function index()
     {
-        $messages = Message::where('to_user_id', user()->id)
-            ->orWhere('from_user_id', user()->id)
-            ->with(['fromUser', 'toUser'])
-            ->latest()
-            ->get();
+        $messages = $this->message->getAllMessages();
 
-        return view('inbox.index', ['messages' => $messages->unique('dialog_id')->groupBy('to_user_id')]);
+        return view('inbox.index', ['messages' => $messages->groupBy('dialog_id')]);
     }
 
     public function show($dialogId)
     {
-        $messages = Message::where('dialog_id', $dialogId)->latest()->get();
+        $messages = $this->message->getDialogMessagesBy($dialogId);
 
         $messages->markAsRead();
 
@@ -35,9 +33,11 @@ class InboxController extends Controller
 
     public function store($dialogId)
     {
-        $message = Message::where('dialog_id', $dialogId)->first();
+        $message = $this->message->getSingleMessageBy($dialogId);
+
         $toUserId = $message->from_user_id === user()->id ? $message->to_user_id : $message->from_user_id;
-        Message::create([
+
+        $this->message->create([
             'from_user_id' => user()->id,
             'to_user_id'   => $toUserId,
             'body'         => request('body'),

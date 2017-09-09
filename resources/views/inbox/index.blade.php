@@ -7,28 +7,28 @@
             <div class="panel panel-default">
                 <div class="panel-heading">消息通知</div>
                 <div class="panel-body">
-                    @foreach($messages as $key => $messageGroup)
-                    <div class="media">
+                    @foreach($messages as $messageGroup)
+                    <div class="media {{ $messageGroup->first()->shouldAddUnreadClass() ? 'unread' : '' }}">
                         <div class="media-left">
                             <a href="#">
-                                @if(Auth::id() == $key)
-                                    <img width="45" src="{{ $messageGroup->first()->fromUser->avatar }}" alt="">
+                                @if(Auth::id() == $messageGroup->last()->from_user_id)
+                                    <img width="45" src="{{ $messageGroup->last()->toUser->avatar }}" alt="">
                                 @else
-                                    <img width="45" src="{{ $messageGroup->first()->toUser->avatar }}" alt="">
+                                    <img width="45" src="{{ $messageGroup->last()->fromUser->avatar }}" alt="">
                                 @endif
                             </a>
                         </div>
                         <div class="media-body">
                             <h4 class="media-heading">
-                                @if(Auth::id() == $key)
-                                    <a href="#">{{ $messageGroup->first()->fromUser->name }}</a>
+                                @if(Auth::id() == $messageGroup->last()->from_user_id)
+                                    <a href="#">{{ $messageGroup->last()->toUser->name }}</a>
                                 @else
-                                    <a href="#">{{ $messageGroup->first()->toUser->name }}</a>
+                                    <a href="#">{{ $messageGroup->last()->fromUser->name }}</a>
                                 @endif
                             </h4>
                             <p>
-                                <a href="/inbox/{{ $messageGroup->last()->dialog_id }}">
-                                    {{ $messageGroup->last()->body }}
+                                <a href="/inbox/{{ $messageGroup->first()->dialog_id }}">
+                                    {{ $messageGroup->first()->body }}
                                 </a>
                             </p>
                         </div>
