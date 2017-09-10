@@ -34,6 +34,9 @@ Route::get('notifications/{notification}', 'NotificationController@show');
 Route::get('avatar', 'UsersController@avatar');
 Route::post('avatar', 'UsersController@changeAvatar');
 
+Route::get('password', 'PasswordController@password');
+Route::post('password/update', 'PasswordController@update');
+
 Route::get('inbox', 'InboxController@index');
 Route::get('inbox/{dialogId}', 'InboxController@show');
 Route::post('inbox/{dialogId}/store', 'InboxController@store');
